@@ -374,9 +374,14 @@
     const submitBtn = document.getElementById('submit-btn');
     const toast     = document.getElementById('toast');
 
+    function sendMessage(){
+      const text = textarea.value.trim();
+      socket.send(text);
+    }
+
     // Keyboard shortcut
     textarea.addEventListener('keydown', e => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      if ( e.key == 'Enter') {
         e.preventDefault();
         form.requestSubmit();
       }
@@ -385,11 +390,11 @@
     // Submit
     form.addEventListener('submit', e => {
       e.preventDefault();
-      const content = textarea.value.trim();
-      if (!content) {
+      const text = textarea.value.trim();
+      if (!text) {
         textarea.focus();
         textarea.style.borderColor = 'var(--danger)';
-        setTimeout(() => textarea.style.borderColor = '', 1200);
+        setTimeout(() => textarea.style.borderColor = '', 500);
         return;
       }
 
@@ -403,7 +408,8 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
 
         textarea.value = '';
-      }, 500);
+      });
+      socket.send(text);
     });
   </script>
 </body>
